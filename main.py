@@ -68,7 +68,7 @@ class List(db.Model):
 
 
 @app.route('/list_page', methods=['POST', 'GET'])
-def user_page():
+def list_page():
     if request.method == "POST":
         title = request.form['title']
         text = request.form['text']
