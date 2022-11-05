@@ -10,7 +10,7 @@ from datetime import datetime
 db = SQLAlchemy()
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = r"postgresql://postgres:5526@localhost:5432/final"
+app.config['SQLALCHEMY_DATABASE_URI'] = r"postgresql://postgres:011009650247@localhost:5432/final"
 
 with app.app_context():
     db.init_app(app)

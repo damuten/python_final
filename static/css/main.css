@@ -1,0 +1,24 @@
+header {
+    color: #bcc4cc;
+    background-color: rgb(229, 92, 52);
+}
+
+footer {
+    background-color: rgb(229, 92, 52);
+    margin-top: auto;
+}
+
+.row {
+    background-color: #fffefe;
+
+}
+.container-fluid{
+    padding: 0;
+    margin: 0;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+}
