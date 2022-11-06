@@ -12,5 +12,10 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
+    background-image: url("bg.png");
+}
+.main_img {
+    max-height: 1049px;
+    background-size: cover;
+    background-repeat: no-repeat;
 }

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, request
+from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager
 from flask_wtf import FlaskForm
@@ -11,6 +12,7 @@ db = SQLAlchemy()
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = r"postgresql://postgres:011009650247@localhost:5432/final"
+bootstrap = Bootstrap(app)
 
 with app.app_context():
     db.init_app(app)
