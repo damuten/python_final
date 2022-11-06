@@ -4,6 +4,30 @@
 About
 {% endblock %}
 
+{% block styles %}
+header {
+  color: #bcc4cc;
+  background-color: rgb(229, 92, 52);
+}
+footer {
+  background-color: rgb(229, 92, 52);
+  margin-top: auto;
+}
+.row {
+  background-color: #fffefe;
+
+}
+.container-fluid{
+  padding: 0;
+  margin: 0;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+{% endblock %}
+
 {% block body%}
 <div class="container-fluid">
   <div class="position-relative overflow-hidden  text-center ">
