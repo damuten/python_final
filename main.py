@@ -1,12 +1,14 @@
 from flask import Flask, render_template, url_for, redirect, request, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager
+from flask_login import UserMixin, login_user, logout_user, current_user, login_required, LoginManager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, Email
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+from sqlalchemy.exc import IntegrityError
+
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -37,25 +39,15 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80), nullable=False, unique=True)
 
 class RegisterForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Password"})
-
-    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(
-        min=4, max=50)], render_kw={"placeholder": "Email"})
-
+    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Password"})
+    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length( min=4, max=50)], render_kw={"placeholder": "Email"})
     submit = SubmitField("Register")
 
 
 class LoginForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Password"})
-
+    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Login")
 
 
@@ -161,8 +153,15 @@ def about():
 
 
 @app.route('/index2')
+@login_required
 def index2():
     return render_template("index2.html")
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 
 if __name__ == "__main__":
