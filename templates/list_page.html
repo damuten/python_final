@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
     <title>list_page</title>
+
+        <!--jQuery-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript">
+            $('#keyup').keyup(function(){
+                $('.keyup').text('Символов: ' + $(this).val().length);
+            });
+    </script>
 </head>
 <body>
 <header class="container-fluid d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-5 border-bottom">
@@ -28,11 +35,14 @@
     <p class="col-lg-10 fs-4">Write your list of products and save them so you don't forget. We will help you make your trip to the store easier.</p>
 </div>
 <form method="post">
-    <input type="text" name="title" id="title" class="form-control" placeholder="Enter title of your list. For example: For guests "><br>
+    <input type="text" name="title" id="keyup" value="" class="form-control" placeholder="Enter title of your list. For example: For guests "><b class="keyup"><br>
     <textarea name="text" id="text" class="form-control" placeholder="Enter products that you will buy"></textarea><br>
     <input type="submit" class="btn btn-outline-dark me-2" value="send">
 </form>
 </div>
+
+
+
 <footer class=" py-3 border-bottom ">
     <p class="text-center text-light">© 2022 Company, Inc</p>
 </footer>
