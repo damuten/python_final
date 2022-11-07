@@ -1,59 +1,53 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, flash
+from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager
+from flask_login import UserMixin, login_user, logout_user, current_user, login_required, LoginManager
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
+from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms.validators import InputRequired, Length, Email
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+import sqlite3
 
-db = SQLAlchemy()
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = r"postgresql://postgres:5526@localhost:5432/final"
-
-with app.app_context():
-    db.init_app(app)
-
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['SECRET_KEY'] = 'secretkey'
+app.config['SECRET_KEY'] = 'hello'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+bootstrap = Bootstrap(app)
+db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "login"
+login_manager.login_view = 'login'
+con = sqlite3.connect("data.db")
+cur = con.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS user (username TEXT, email TEXT, password TEXT)")
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), unique=True)
+    email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(80))
+
+
+with app.app_context():
+    db.create_all()
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.CITEXT, nullable=False, unique=True)
-
 class RegisterForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Password"})
-
-    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(
-        min=4, max=50)], render_kw={"placeholder": "Email"})
-
+    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)], render_kw={"placeholder": "Email"})
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)], render_kw={"placeholder": "Username"})
+    password = PasswordField('password', validators=[InputRequired(), Length(min=4, max=80)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Register")
 
 
 class LoginForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[InputRequired(), Length(
-        min=4, max=20)], render_kw={"placeholder": "Password"})
-
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)], render_kw={"placeholder": "Username"})
+    password = PasswordField('password', validators=[InputRequired(), Length(min=4, max=80)], render_kw={"placeholder": "Password"})
     submit = SubmitField("Login")
 
 
@@ -65,10 +59,64 @@ class List(db.Model):
 
     def __repr__(self):
         return '<List %r>' % self,id
+    
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username = form.username.data).first()
+        if user:
+            if check_password_hash(user.password, form.password.data):
+                login_user(user)
+            flash("Welcome to your account!", "warning")        
+            return redirect(url_for('index2')) 
+        else:   
+            return '<h1>Invalid username or password</h1>'
+    return render_template("index.html", form=form)    
+
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+
+@app.route('/reg', methods=['GET', 'POST'])
+def reg():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data,  method='sha256')
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Account successfully created!", "warning")
+        return redirect(url_for('index'))
+    
+    return render_template("reg.html", form=form)
+
+
+@app.route('/index2')
+@login_required
+def index2():
+    return render_template("index2.html", name=current_user.username)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+
+
+
+
+
 
 
 @app.route('/list_page', methods=['POST', 'GET'])
-def user_page():
+def list_page():
     if request.method == "POST":
         title = request.form['title']
         text = request.form['text']
@@ -124,42 +172,6 @@ def list_update(id):
     else:
         return render_template('list_update.html', grocery=grocery)
 
-
-@app.route('/reg', methods=['GET', 'POST'])
-def reg():
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('index'))
-
-    return render_template("reg.html", form=form)
-
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter(User.username == form.username.data).first()
-        hashed_pwd = bcrypt.generate_password_hash(form.data["password"], 10)
-        if user:
-            if bcrypt.check_password_hash(hashed_pwd, user.password):
-                login_user(user)
-        return redirect(url_for('index2'))
-    return render_template("index.html", form=form)
-
-
-@app.route('/about')
-def about():
-    return render_template("about.html")
-
-
-@app.route('/index2')
-def index2():
-    return render_template("index2.html")
 
 
 if __name__ == "__main__":
