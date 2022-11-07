@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager
@@ -136,8 +136,8 @@ def reg():
         new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
+        flash("Account successfully created!", "warning")
         return redirect(url_for('index'))
-
     return render_template("reg.html", form=form)
 
 
@@ -150,6 +150,7 @@ def index():
         if user:
             if bcrypt.check_password_hash(hashed_pwd, user.password):
                 login_user(user)
+        flash("Welcome to your account!", "warning")        
         return redirect(url_for('index2'))
     return render_template("index.html", form=form)
 

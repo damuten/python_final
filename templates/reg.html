@@ -12,6 +12,15 @@ Register
 {% endblock %}
 
 {% block body %}
+
+{% with messages = get_flashed_messages()%}
+  {%if messages%}
+    {%for msg in messages%}
+      <div class="alert-error">{{msg}}</div>
+    {%endfor%}  
+  {%endif%}
+{%endwith%}
+
 <div class="container">
   <div class="row align-items-center g-lg-5 py-5">
         <div class="col-lg-7 text-center text-lg-start">

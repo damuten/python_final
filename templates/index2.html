@@ -5,6 +5,15 @@ Main Page
 {% endblock %}
 
 {% block body%}
+
+{% with messages = get_flashed_messages()%}
+  {%if messages%}
+    {%for msg in messages%}
+        <div class="alert-error">{{msg}}</div>
+    {%endfor%}  
+  {%endif%}
+{%endwith%}
+
 <div class="container-fluid">
 <div class="row align-items-center g-lg-5 py-5">
       <div class="col-lg-6 col-md-12 mb-4 mb-md-0">

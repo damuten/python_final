@@ -1,10 +1,10 @@
 header {
     color: #bcc4cc;
-    background-color: rgb(229, 92, 52);
+    background-color: #a2d2ff;
 }
 
 footer {
-    background-color: rgb(229, 92, 52);
+    background-color: #a2d2ff;
     margin-top: auto;
 }
 
@@ -12,10 +12,14 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-image: url("bg.png");
 }
-.main_img {
-    max-height: 1049px;
-    background-size: cover;
-    background-repeat: no-repeat;
+
+.alert-error {
+    padding: 8px;
+    background-color: #a2d2ff;
+    color: white;
+    text-align: center;
 }
+
+
+
