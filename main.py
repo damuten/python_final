@@ -109,12 +109,6 @@ def logout():
 
 
 
-
-
-
-
-
-
 @app.route('/list_page', methods=['POST', 'GET'])
 def list_page():
     if request.method == "POST":
