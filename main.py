@@ -21,7 +21,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 con = sqlite3.connect("data.db")
 cur = con.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS user (username TEXT, email TEXT, password TEXT)")
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -116,6 +116,7 @@ def logout():
 
 
 @app.route('/list_page', methods=['POST', 'GET'])
+@login_required
 def list_page():
     if request.method == "POST":
         title = request.form['title']
@@ -134,18 +135,21 @@ def list_page():
 
 
 @app.route('/user_page')
+@login_required
 def user_page():
     lists = List.query.order_by(List.date.desc()).all()
     return render_template("user_page.html", lists=lists)
 
 
 @app.route('/user_page/<int:id>')
+@login_required
 def lists_full(id):
     grocery = List.query.get(id)
     return render_template("list_full.html", grocery=grocery)
 
 
 @app.route('/user_page/<int:id>/del')
+@login_required
 def list_delete(id):
     grocery = List.query.get_or_404(id)
 
@@ -158,6 +162,7 @@ def list_delete(id):
 
 
 @app.route('/user_page/<int:id>/update', methods=['POST', 'GET'])
+@login_required
 def list_update(id):
     grocery = List.query.get(id)
     if request.method == "POST":

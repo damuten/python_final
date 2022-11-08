@@ -8,21 +8,25 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
     <title>{{ grocery.title }}</title>
+
+    <!--Favicon-->
+    <link rel="icon" type="image/x-icon" href="static/pics/favicon.png">
+
 </head>
 <body>
-<header class="container-fluid d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-5 border-bottom">
-    <a href="/index2" style="padding-left: 20px;"class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-light text-decoration-none">
-        <img src="static/logo.png" alt="" width="40" height="40">
-    </a>
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-left mb-md-0">
-        <li><a href="/index2" class="nav-link link-light">Home</a></li>
-        <li><a href="/list_page" class="btn btn-outline-light me-2">Write list</a></li>
-        <li><a href="/user_page" class="btn btn-outline-light me-2">All lists</a></li>
-    </ul>
-</header>
+    <header class="container-fluid d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-5 border-bottom">
+        <a href="/index2" style="padding-left: 20px;"class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-light text-decoration-none">
+            <img src="static/pics/logo.png" alt="" width="40" height="40">
+        </a>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-left mb-md-0">
+            <li><a href="/index2" class="nav-link link-light">Home</a></li>
+            <li><a href="/list_page" class="btn btn-outline-light me-2">Write list</a></li>
+            <li><a href="/user_page" class="btn btn-outline-light me-2">All lists</a></li>
+        </ul>
+    </header>
 <div class="col-lg-7 text-left text-lg-start">
     <div class="rounded float-end col-lg-6 col-md-12 mb-6 mb-md-0">
-        <img src="{{url_for('static', filename='l3.png')}}" class="img-fluid rounded float-end">
+        <img src="{{url_for('static', filename='pics/l3.png')}}" class="img-fluid rounded float-end">
     </div>
     <h5 class="container display-4 fw-bold lh-1 mb-3">{{ grocery.title }}</h5>
     <p class="container col-lg-15 fs-4"><b>{{ grocery.text }}</b></p>
