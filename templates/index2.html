@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--CSS-->
+  <link rel="stylesheet" href="{{url_for('.static', filename='css/main.css')}}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+  
+  <title> 
+      Welcome
+  </title>
+
+  <!--Favicon-->
+  <link rel="icon" type="image/x-icon" href="static/pics/favicon.png">
+
+  <!--jQuery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+  <header class="container-fluid sticky-top  d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-5 border-bottom">
+    <a href="/index2" style="padding-left: 20px;"class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-light text-decoration-none">
+          <img src="static/pics/logo.png" alt="" width="40" height="40">
+    </a>
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-left mb-md-0">
+      <li><a href="/index2" class="nav-link link-light">Home</a></li>
+      <li><a href="/list_page" class="btn btn-outline-light me-2">Write List</a></li>
+      <li><a href="user_page" class="btn btn-outline-light me-2">My lists</a></li>
+      <li><a href="/" class="btn btn-outline-light me-2">Log out</a></li>
+    </ul>
+</header>
+
+
+{% with messages = get_flashed_messages()%}
+  {%if messages%}
+    {%for msg in messages%}
+        <div class="alert-error">{{msg}}</div>
+    {%endfor%}  
+  {%endif%}
+{%endwith%}
+
+<div class="container-fluid">
+<div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h1 class="display-4 fw-bold lh-1 mb-3">Welcome to our system. Now you can write your grocery lists, update and delete them. </h1>
+      </div>
+    <div class="col-lg-5 col-md-12 mb-4 mb-md-0">
+        <img src="{{url_for('static', filename='pics/index2.png')}}" class="img-fluid">
+    </div>
+</div>
+</div>
+
+<div style="text-align: center;">
+  <h3 style="color:#000000; " >
+      Discover malls near you
+  </h3> 
+  <div>
+      <!-- Google Map Copied Code -->
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13756.70937182757!2d71.40464891490093!3d51.11677797814886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4245850431d33c39%3A0xe7b8904bdf73f308!2sMagnum%2024%2F7!5e0!3m2!1sru!2skz!4v1667826993327!5m2!1sru!2skz"
+       width="1300" 
+       height="300" 
+       style="border:0; padding-bottom:80px;" 
+       allowfullscreen="" 
+       loading="lazy" 
+       referrerpolicy="no-referrer-when-downgrade">
+
+      </iframe>
+  </div>
+</div>
+
+<footer class=" py-3 border-bottom ">
+  <p class="text-center text-light">© 2022, made with love 🤍</p>
+</footer>
+
+<!--JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+</body>
+</html>

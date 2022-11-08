@@ -1,25 +1,47 @@
 {% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
 Main Page
 {% endblock %}
 
+{% block styles %}
+.container-fluid{
+  padding: 0;
+  margin: 0;
+}
+{% endblock %}
+
 {% block body%}
-<div class="container-fluid">
-<div class="row align-items-center g-lg-5 py-5">
-      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-        <h1 class="display-4 fw-bold lh-1 mb-3">Welcome to the place where you can write your grocery list</h1>
-        <p class="col-lg-10 fs-4">This website will help you to remember what you need to buy.</p>
-          <form method="POST" action="">
-          {{ form.hidden_tag() }}
-          {{ form.username }}
-          {{ form.password }}
-          {{ form.submit }}
-          </form>
+
+{% with messages = get_flashed_messages()%}
+  {%if messages%}
+    {%for msg in messages%}
+      <div class="alert-error">{{msg}}</div>
+    {%endfor%}  
+  {%endif%}
+{%endwith%}
+
+<div class="main_img float-start img-fluid">
+
+  <div class="container-fluid">
+    <div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-6 text-center text-lg-start">
+        <h1 class="display-4 fw-bold lh-1 mb-3">Welcome to the place where you can keep your grocery lists</h1>
+        <p class="col-lg-10 fs-4">If you already have account, you can log in there ⬇️</p>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.username }}
+            {{ form.password }}
+            {{ form.submit }}
+        </form>
       </div>
-    <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-        <img src="{{url_for('static', filename='Subject.png')}}" class="img-fluid" >
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <img src="{{url_for('static', filename='pics/basket.png')}}" class="img-fluid" >
+      </div>
     </div>
-</div>
-</div>
+  </div>
+
+</div 
+
 {% endblock %}
